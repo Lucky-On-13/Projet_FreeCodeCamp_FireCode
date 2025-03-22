@@ -44,3 +44,8 @@ Promise.all([d3.json(countyDataUrl), d3.json(educationDataUrl)])
                     .style("top", event.pageY - 30 + "px");
             })
             .on("mouseout", () => tooltip.style("visibility", "hidden"));
+            const legendScale = d3.scaleLinear()
+            .domain([10, 50])
+            .range([0, legendWidth]);
+
+      
