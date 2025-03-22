@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treemap Diagram</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+ 
+</head>
+<body>
+
+  <div id="chart-container">
+    <h1 id="title">Movie Sales Treemap</h1>
+    <p id="description">This treemap visualizes movie sales across different genres. The area of each tile corresponds to the sales of the movie in millions.</p>
+    <svg id="treemap" width="100%" height="600"></svg>
+    <div id="tooltip"></div>
+    <div id="legend"></div>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="window.location.href='../Home.html'">Back to Main Menu</button>
+  </div>
+
+  <script src="treemap.js"></script>
+</body>
+</html>
