@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+#container {
+    text-align: center;
+}
+
+#tooltip {
+    position: absolute;
+    opacity: 0;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.dot {
+    stroke: #000;
+    stroke-width: 1px;
+}
+
+#legend {
+    font-size: 12px;
+}
+
+.legend-rect {
+    stroke: #000;
+    stroke-width: 1px;
+}
