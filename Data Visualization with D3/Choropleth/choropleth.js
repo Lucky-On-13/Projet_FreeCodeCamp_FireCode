@@ -12,3 +12,35 @@ const legendSvg = d3.select("#legend")
 
 const educationDataUrl = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
 const countyDataUrl = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
+
+Promise.all([d3.json(countyDataUrl), d3.json(educationDataUrl)])
+    .then(([countyData, educationData]) => {
+        const educationMap = new Map(educationData.map(d => [d.fips, d]));
+
+        const colorScale = d3.scaleThreshold()
+            .domain([10, 20, 30, 40, 50])
+            .range(["#f2f0f7", "#cbc9e2", "#9e9ac8", "#756bb1", "#54278f"]);
+
+        const path = d3.geoPath();
+
+        svg.append("g")
+            .selectAll("path")
+            .data(topojson.feature(countyData, countyData.objects.counties).features)
+            .enter().append("path")
+            .attr("class", "county")
+            .attr("d", path)
+            .attr("fill", d => {
+                const education = educationMap.get(d.id);
+                return education ? colorScale(education.bachelorsOrHigher) : "#ccc";
+            })
+            .attr("data-fips", d => d.id)
+            .attr("data-education", d => educationMap.get(d.id)?.bachelorsOrHigher || "N/A")
+            .on("mouseover", (event, d) => {
+                const education = educationMap.get(d.id);
+                tooltip.style("visibility", "visible")
+                    .html(education ? `${education.area_name}, ${education.state}: ${education.bachelorsOrHigher}%` : "Data not available")
+                    .attr("data-education", education ? education.bachelorsOrHigher : "N/A")
+                    .style("left", event.pageX + 10 + "px")
+                    .style("top", event.pageY - 30 + "px");
+            })
+            .on("mouseout", () => tooltip.style("visibility", "hidden"));
