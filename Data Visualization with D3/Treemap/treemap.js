@@ -42,3 +42,18 @@ d3.json(movieDataUrl).then(data => {
         .attr("data-value", d.data.value)
         .html(`${d.data.name}<br>${d.data.category}<br>$${d.data.value.toLocaleString()}`);
     })
+    .on("mouseout", function() {
+      d3.select("#tooltip").style("visibility", "hidden");
+    });
+
+  // Create the legend
+  const legend = d3.select("#legend");
+
+  const categories = [...new Set(data.children.map(d => d.name))];
+  categories.forEach(category => {
+    legend.append("div")
+      .style("display", "inline-block")
+      .style("margin", "0 10px")
+      .html(`<div class="legend-item" style="background-color:${colorScale(category)}"></div> ${category}`);
+  });
+});
