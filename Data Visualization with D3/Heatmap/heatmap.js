@@ -1,4 +1,3 @@
-
 const url = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json';
 
 d3.json(url).then(data => {
@@ -8,25 +7,23 @@ d3.json(url).then(data => {
     const width = 1200 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
-    // Configuration des mois
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    // Création du SVG
     const svg = d3.select("#container")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(${margin.left},${margin.top})");
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Échelles
+    // Ajuster le domaine de l'échelle des x pour inclure 2010
     const xScale = d3.scaleTime()
         .domain([
             d3.min(dataset, d => new Date(d.year, 0)),
-            d3.max(dataset, d => new Date(d.year, 0))
+            new Date(2010, 0) // Forcer l'axe à s'étendre jusqu'à 2010
         ])
         .range([0, width]);
 
@@ -35,30 +32,28 @@ d3.json(url).then(data => {
         .range([0, height])
         .padding(0.01);
 
-    const tempRange = [baseTemp + d3.min(dataset, d => d.variance), 
-                     baseTemp + d3.max(dataset, d => d.variance)];
-    
+    // Ajuster le domaine de l'échelle de couleurs pour correspondre à l'image
     const colorScale = d3.scaleQuantize()
-        .domain(tempRange)
-        .range(d3.schemeRdYlBu[9].reverse());
+        .domain([2.8, 12.8]) // Domaine ajusté pour correspondre à l'image
+        .range(d3.schemeRdYlBu[9].reverse()); // 9 couleurs et ordre inversé
 
-    // Axes
+    // Ajuster les ticks de l'axe des abscisses pour qu'ils soient espacés de 10 en 10
     const xAxis = d3.axisBottom(xScale)
-        .tickFormat(d3.timeFormat("%Y"));
+        .tickFormat(d3.timeFormat("%Y"))
+        .ticks(d3.timeYear.every(10)); // Afficher les ticks tous les 10 ans
 
     const yAxis = d3.axisLeft(yScale)
         .tickFormat(d => d.substring(0, 3));
 
     svg.append("g")
         .attr("id", "x-axis")
-        .attr("transform", "translate(0,${height})")
+        .attr("transform", `translate(0,${height})`)
         .call(xAxis);
 
     svg.append("g")
         .attr("id", "y-axis")
         .call(yAxis);
 
-    // Cellules
     const cellWidth = width / (2015 - 1753);
     const cellHeight = height / 12;
 
@@ -78,7 +73,6 @@ d3.json(url).then(data => {
         .on("mouseover", showTooltip)
         .on("mouseout", hideTooltip);
 
-    // Tooltip
     const tooltip = d3.select("body")
         .append("div")
         .attr("id", "tooltip")
@@ -93,15 +87,14 @@ d3.json(url).then(data => {
                 Temp: ${temp}℃<br>
                 Variance: ${d.variance.toFixed(2)}℃
             `)
-            .style("left", "${event.pageX + 10}px")
-            .style("top", "${event.pageY - 60}px");
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 60}px`);
     }
 
     function hideTooltip() {
         tooltip.style("opacity", 0);
     }
 
-    // Légende
     const legendWidth = 400;
     const legendHeight = 30;
 
@@ -111,12 +104,12 @@ d3.json(url).then(data => {
         .attr("height", 60);
 
     const legendScale = d3.scaleLinear()
-        .domain(colorScale.domain())
+        .domain(colorScale.domain()) // Utiliser le même domaine que colorScale
         .range([0, legendWidth - 50]);
 
     const legendAxis = d3.axisBottom(legendScale)
         .tickSize(15)
-        .tickValues(colorScale.thresholds())
+        .tickValues(colorScale.thresholds()) // Utiliser les seuils de colorScale
         .tickFormat(d3.format(".1f"));
 
     legend.append("g")
