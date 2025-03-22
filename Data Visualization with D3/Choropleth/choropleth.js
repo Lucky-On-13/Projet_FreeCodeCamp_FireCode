@@ -48,4 +48,23 @@ Promise.all([d3.json(countyDataUrl), d3.json(educationDataUrl)])
             .domain([10, 50])
             .range([0, legendWidth]);
 
-      
+        const legendAxis = d3.axisBottom(legendScale)
+            .tickValues(colorScale.domain())
+            .tickFormat(d => d + "%")
+            .tickSize(10);
+
+        legendSvg.selectAll("rect")
+            .data(colorScale.range().map((color, i) => {
+                return { color, value: colorScale.domain()[i] };
+            }))
+            .enter().append("rect")
+            .attr("x", (d, i) => i * (legendWidth / colorScale.domain().length))
+            .attr("width", legendWidth / colorScale.domain().length)
+            .attr("height", 20)
+            .attr("fill", d => d.color);
+
+        legendSvg.append("g")
+            .attr("transform", "translate(0, 20)")
+            .call(legendAxis);
+    })
+    .catch(error => console.error("Error loading data:", error));
