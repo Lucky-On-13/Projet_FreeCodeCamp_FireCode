@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treemap Diagram</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f7f6;
+        margin: 0;
+    }
+
+    #chart-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: auto;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    #tooltip {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .county {
+        stroke: white;
+    }
+
+    .legend {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .legend rect {
+        width: 30px;
+        height: 20px;
+    }
+
+    /* Style du bouton de retour */
+    .back-button {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 10px;
+        font-size: 16px;
+        color: white;
+        background-color: #007BFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+    
+</style>
+ 
+</head>
+<body>
+
+  <div id="chart-container">
+    <h1 id="title">Movie Sales Treemap</h1>
+    <p id="description">This treemap visualizes movie sales across different genres. The area of each tile corresponds to the sales of the movie in millions.</p>
+    <svg id="treemap" width="100%" height="600"></svg>
+    <div id="tooltip"></div>
+    <div id="legend"></div>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="window.location.href='../Home.html'">Back to Main Menu</button>
+  </div>
+
+  <script src="treemap.js"></script>
+</body>
+</html>
